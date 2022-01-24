@@ -37,9 +37,9 @@ class Airport(
 )
 object Airport:
   def parseAirport(line: Array[String]): Option[Airport] =
-    (Try(line(0).toLong).toOption, line(1), line(2), line(3)).match {
+    (Try(line(0).toLong).toOption, line(1), line(2), line(3), line(7)).match {
       //check for how to implement toEither instead? for more error handling?
-      case (Some(i), code, name, cnt) =>
+      case (Some(i), ident, typ, name, ctn) =>
         Some(Airport(i, code, name, cnt))
-      case (None, _, _, _) => None
+      case (None, _, _, _, _) => None
     }
