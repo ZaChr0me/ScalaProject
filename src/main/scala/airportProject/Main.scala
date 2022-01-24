@@ -1,7 +1,7 @@
-package fileReader
+package airportProject
 
-import fileReader.model.Point
-import fileReader.service.CSV
+import airportProject.model._
+import airportProject.service._
 
 import scala.collection.MapView
 import scala.io.BufferedSource
@@ -9,6 +9,9 @@ import scala.collection.mutable
 import scala.collection.parallel.CollectionConverters._
 import scala.collection.parallel.ParSeq
 import scala.collection.mutable.ListBuffer
+
+
+//implementer la scala 3 functionality that allows dealing with null (check at compile time that there are no null)
 
 //fuzzy matching by levenshtein distance calculator algorithm, found here https://rosettacode.org/wiki/Levenshtein_distance#Scala
 //needs to understand this better, ask teacher
@@ -97,7 +100,9 @@ def languageVoting(voteList: List[(Int, String)]): List[(String, Int)] = {
 
  */
 
-def Initialize(): = {}
+
+
+def Initialize() = {}
 
 def main(args: Array[String]): Unit = {
   printf("project console entry point. TEMPORARY.")

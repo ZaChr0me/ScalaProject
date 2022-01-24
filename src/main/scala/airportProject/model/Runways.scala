@@ -1,4 +1,4 @@
-package fileReader.model
+package airportProject.model
 
 //Runways need :
 //id,airport ref,airport ident,surface,
