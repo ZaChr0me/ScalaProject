@@ -100,13 +100,14 @@ def languageVoting(voteList: List[(Int, String)]): List[(String, Int)] = {
 
  */
 
-def Initialize() = {}
+def initialize(): Database = Database.initializeFromCsv()
 
 def main(args: Array[String]): Unit = {
+  val database = initialize()
   printf("project console entry point. TEMPORARY.")
 
   //input user choice between query and reports
-
+  
   //for now, and to go faster, main is used as manual testing, while the core app
   //isn't done, and the work on gui hasn't started
 
@@ -119,9 +120,18 @@ def main(args: Array[String]): Unit = {
 
 }
 
-def QueryWork(country_code_or_name: String, code_or_name: Boolean) = {
+def queryWork(country_code_or_name: String, code_or_name: Boolean, database: Database) = {
   code_or_name.match {
-    case true  => {}
-    case false => {}
+    case true  => {queryCode(query_code, database)}
+    case false => {queryName(query_name, database)}
   }
+
+}
+
+def queryCode(countryCode: String, database: Database) = {
+
+}
+
+def queryName(countryName: String, database: Database) = {
+
 }

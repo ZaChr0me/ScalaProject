@@ -41,7 +41,7 @@ object Airport:
         line(9),
         line(10)).match {
       //check for how to implement toEither instead? for more error handling?
-      case (Some(i), ident, Some(at), name,  Some(ctn),isoC,isoR,municip) =>
+      case (Some(i), ident, Some(ct), name,  Some(ctn),isoC,isoR,municip) =>
         Some(Airport(i,ident,at,name,ct,isoC,isoR,municip))
       case (None, _, _, _, _) => None//line 0 alias ID is incorrect
       case (_,_,Some(at),_,_)=>None//line 2 alias the airport type is incorrect
