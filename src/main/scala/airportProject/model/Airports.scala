@@ -1,45 +1,52 @@
-package fileReader.model
+package airportProject.model
 
 import scala.util.Try
+import scala.util.Failure
 
 //airports needs :
 //id,ident,type,name,continent,iso_country,iso_region,municipality,gps_code
-object AirportType {
-  sealed abstract class Type(val i: Int, val text: String) {
-    def getAirportTypeFromString(s: String): Option[Type] = s.match {
-      case s"heliport"       => Some(AirportType.heliport)
-      case s"small_airport"  => Some(AirportType.small_airport)
-      case s"medium_airport" => Some(AirportType.medium_airport)
-      case s"large_airport"  => Some(AirportType.large_airport)
-      case s"balloonport"    => Some(AirportType.balloonport)
-      case s"seaplane_base"  => Some(AirportType.seaplane_base)
-      case s"closed"         => Some(AirportType.closed)
-    }
-  }
-  case object heliport extends Type(1, "heliport")
-  case object small_airport extends Type(2, "small_airport")
-  case object medium_airport extends Type(3, "medium_airport")
-  case object large_airport extends Type(4, "large_airport")
-  case object balloonport extends Type(5, "balloonport")
-  case object seaplane_base extends Type(6, "seaplane_base")
-  case object closed extends Type(7, "closed")
 
-  import scala.Enumeration
-  val airportTypes: Set[Type] = sealedInstancesOf[Type]
-}
 
 class Airport(
-    id: Long,
+    id: Int,
     ident: String,
-    airporttype: AirportType,
+    airportType: AirportType,
     name: String,
-    continent: String
+    continent: ContinentType,
+    isoCountry:String,
+    isoRegion:String,
+    municipality:String,
+    gpsCode:String="",
+    localCode:String="",
+    latitudeDeg:Double=0.0,
+    longitudeDeg:Double=0.0,
+    elevationFt:Double=0.0,
+    scheduledService:Boolean=false,
+    iataCode:String="",
+    homeLink:String="",
+    wikipediaLink:String="",
+    keywords:String=""
+
+
 )
+//TODO recheck later what is optional and what is absolutely needed
 object Airport:
   def parseAirport(line: Array[String]): Option[Airport] =
-    (Try(line(0).toLong).toOption, line(1), line(2), line(3), line(7)).match {
+    (Try(line(0).toInt).toOption,
+     line(1),
+      Try(AirportType.valueOf(line(2))).toOption,
+       line(3),
+        Try(AirportType.valueOf(line(7))).toOption,
+        line(8),
+        line(9),
+        line(10)).match {
       //check for how to implement toEither instead? for more error handling?
-      case (Some(i), ident, typ, name, ctn) =>
-        Some(Airport(i, code, name, cnt))
-      case (None, _, _, _, _) => None
+      case (Some(i), ident, Some(at), name,  Some(ctn),isoC,isoR,municip) =>
+        Some(Airport(i,ident,at,name,ct,isoC,isoR,municip))
+      case (None, _, _, _, _) => None//line 0 alias ID is incorrect
+      case (_,_,Some(at),_,_)=>None//line 2 alias the airport type is incorrect
+    }
+    def temp()={
+      val aTest:AirportType=AirportType.Heliport
+      aTest.toString
     }
