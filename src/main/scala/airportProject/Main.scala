@@ -97,7 +97,10 @@ def languageVoting(voteList: List[(Int, String)]): List[(String, Int)] = {
 
  */
 
-def Initialize(): = {}
+
+def Initialize(): = {
+
+}
 
 def main(args: Array[String]): Unit = {
   printf("project console entry point. TEMPORARY.")
