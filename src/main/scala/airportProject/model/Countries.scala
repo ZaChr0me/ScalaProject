@@ -27,7 +27,14 @@ object Continent {
   import scala.Enumeration
   val continentCodes: Set[ContinentCode] = sealedInstancesOf[ContinentCode]
 }
-class Country(id: Long, code: String, name: String, continent: Continent)
+class Country(
+  id: Long, 
+  code: String, 
+  name: String, 
+  continent: Continent,
+  wikipediaLink: String = "",
+  keywords: String = ""
+  )
 object Country:
   def parseCountry(line: Array[String]): Option[Country] =
     (Try(line(0).toLong).toOption, line(1), line(2), line(3)).match {
