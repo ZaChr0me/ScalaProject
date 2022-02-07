@@ -1,17 +1,21 @@
-package airport.model
+package airportProject.memoryDatabase
 
+import airportProject.model._
+import airportProject.service._
 import scala.io.Source
 
-class Database {
-    airports: List[Airport],
-    countries: List[Country],
-    runways: List[Runway]
-}
+class Database (
+    val airports: List[Airport],
+    val countries: List[Country],
+    val runways: List[Runway])
 
-def initializeFromCsv(): Database = {
-    Database(
-        CSV.read[Airport]("resources/airports.csv", Airport.parseAirport).lines,
-        CSV.read[Country]("resources/countries.csv", Country.parseCountry).lines,
-        CSV.read[Runway]("resources/runways.csv", Runway.parseRunway).lines
-    )
+
+
+object Database {
+    def initializeFromCsv(): Database = {
+        Database(CSV.read("airports.csv", Airport.parseAirport).lines.toList,
+        CSV.read("countries.csv", Country.parseCountry).lines.toList, 
+        CSV.read("runways.csv", Runway.parseRunway).lines.toList)
+    }
+
 }
