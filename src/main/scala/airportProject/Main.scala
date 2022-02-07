@@ -116,7 +116,7 @@ def main(args: Array[String]): Unit = {
   val code_or_name: Boolean = false
 
   val query_name_fuzzy: String = ""
-
+ val test: VerifyIntAsBool=0
 }
 
 def QueryWork(country_code_or_name: String, code_or_name: Boolean) = {
