@@ -2,6 +2,7 @@ package airportProject
 
 import airportProject.model._
 import airportProject.service._
+import airportProject.memoryDatabase._
 
 import scala.collection.MapView
 import scala.io.BufferedSource
@@ -9,7 +10,6 @@ import scala.collection.mutable
 import scala.collection.parallel.CollectionConverters._
 import scala.collection.parallel.ParSeq
 import scala.collection.mutable.ListBuffer
-
 
 //implementer la scala 3 functionality that allows dealing with null (check at compile time that there are no null)
 
@@ -120,33 +120,106 @@ def main(args: Array[String]): Unit = {
   val query_name_fuzzy: String = ""
 
   reportOrQuery.match {
-    case true => reportWork(database, reportType)
+    case true  => reportWork(database, reportType)
     case false => queryWork(queryCodeOrName, codeOrName, database)
   }
 
 }
 
-
-def queryWork(country_code_or_name: String, code_or_name: Boolean, database: Database) = {
-  code_or_name.match {
-    case true  => {queryCode(query_code, database)}
-    case false => {queryName(query_name, database)}
+def queryWork(
+    countryCodeOrName: String,
+    codeOrName: Boolean,
+    database: Database
+) = {
+  codeOrName.match {
+    case true  => { queryCode(countryCodeOrName, database) }
+    case false => { queryName(countryCodeOrName, database) }
   }
 
 }
 
 def reportWork(database: Database, reportType: String) = {
   reportType.match {
-    case "countries" => database.parseReportCountries()
-    case "surface" => database.parseReportSurface()
-    case "latitude" => database.parseReportLatitude()
+    case "countries" => parseReportCountries(database)
+    case "surface"   => parseReportSurface(database)
+    case "latitude"  => parseReportLatitude(database)
   }
 }
 
 def queryCode(countryCode: String, database: Database) = {
-  val result: List[(Airport, List[Runway])] = database.parseCountryCode(countryCode)
+  val result: List[(Airport, List[Runway])] =
+    parseCountryCode(database, countryCode)
 }
 
 def queryName(countryName: String, database: Database) = {
-  val result: List[(Airport, List[Runway])] = database.parseCountryName(countryName)
+  val result: List[(Airport, List[Runway])] =
+    parseCountryName(database, countryName)
 }
+
+def parseCountryCode(
+    database: Database,
+    countryCode: String
+): List[(Airport, List[Runway])] = database.airports
+  .filter(airport => { airport.isoCountry == countryCode })
+  .map(airport =>
+    (
+      airport,
+      database.runways.filter(x => {
+        x.airportIdent == airport.ident && x.airportRef == airport.id
+      })
+    )
+  )
+
+def parseCountryName(
+    database: Database,
+    countryName: String
+): List[(Airport, List[Runway])] = database.airports
+  .filter(airport => { airport.name == countryName })
+  .map(airport =>
+    (
+      airport,
+      database.runways.filter { runway =>
+        (runway.airportRef == airport.id && runway.airportIdent == airport.ident)
+      }
+    )
+  )
+
+def parseReportCountries(database: Database): List[(Country, Int)] =
+  database.countries
+    .map(country =>
+      (
+        country,
+        database.airports
+          .filter(airport => (airport.isoCountry == country.code))
+          .size
+      )
+    )
+    .sortWith(_._2 > _._2)
+    .filter((x, y) => y < 10 && y > (database.countries.size - 10))
+
+def parseReportSurface(database: Database): List[(Country, List[String])] =
+  database.countries
+    .map(country =>
+      (
+        country,
+        database.runways
+          .filter(runway =>
+            database.airports
+              .filter(airport => (airport.isoCountry == country.code))
+              .contains(runway.airportIdent)
+          )
+          .map(_.surface)
+          .map(_.toUpperCase)
+          .distinct
+      )
+    )
+
+def parseReportLatitude(database: Database): List[(String, Int)] =
+  database.runways
+    .map(runway =>
+      (
+        String(runway.leIdent),
+        database.runways.filter(x => x.leIdent == runway.leIdent).size
+      )
+    )
+    .distinct

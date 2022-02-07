@@ -8,24 +8,24 @@ import scala.util.Failure
 
 
 class Airport(
-    id: Int,
-    ident: String,
-    airportType: AirportType,
-    name: String,
-    continent: ContinentType,
-    isoCountry:String,
-    isoRegion:String,
-    municipality:String,
-    gpsCode:String="",
-    localCode:String="",
-    latitudeDeg:Double=0.0,
-    longitudeDeg:Double=0.0,
-    elevationFt:Double=0.0,
-    scheduledService:Boolean=false,
-    iataCode:String="",
-    homeLink:String="",
-    wikipediaLink:String="",
-    keywords:String=""
+    val id: Int,
+    val ident: String,
+    val airportType: AirportType,
+    val name: String,
+    val continent: ContinentType,
+    val isoCountry:String,
+    val isoRegion:String,
+    val municipality:String,
+    val gpsCode:String="",
+    val localCode:String="",
+    val latitudeDeg:Double=0.0,
+    val longitudeDeg:Double=0.0,
+    val elevationFt:Double=0.0,
+    val scheduledService:Boolean=false,
+    val iataCode:String="",
+    val homeLink:String="",
+    val wikipediaLink:String="",
+    val keywords:String=""
 
 
 )

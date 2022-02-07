@@ -6,12 +6,12 @@ import scala.util.Try
 //id,code,name,continent,wikipedia link
 
 class Country(
-  id: Long, 
-  code: String, 
-  name: String, 
-  continent: ContinentType,
-  wikipediaLink: String = "",
-  keywords: String = ""
+  val id: Long, 
+  val code: String, 
+  val name: String, 
+  val continent: ContinentType,
+  val wikipediaLink: String = "",
+  val keywords: String = ""
   )
 object Country:
   def parseCountry(line: Array[String]): Option[Country] =
