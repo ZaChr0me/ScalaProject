@@ -1,7 +1,7 @@
-package fileReader.service
+package airportProject.service
 
 
-import fileReader.model.Point
+import airportProject.model.Point
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.must.Matchers
 
