@@ -6,7 +6,7 @@ import org.scalatest.matchers.must.Matchers
 
 
 
-class parserSpec extends AnyFlatSpec with Matchers:
+class ParserSpec extends AnyFlatSpec with Matchers:
     
 
     "Airports" should "Parse a valid airport" in {
