@@ -3,18 +3,18 @@ package airportProject.model
 import scala.util.Try
 import airportProject.service._
 class Country(
-    id: Long,
-    code: NonEmptyString,
-    name: NonEmptyString,
-    continent: ContinentType,
-    wikipediaLink: Option[NonEmptyString],
-    keywords: Option[NonEmptyString]
+    val id: Long,
+    val code: IsoCountryType,
+    val name: NonEmptyString,
+    val continent: ContinentType,
+    val wikipediaLink: Option[NonEmptyString],
+    val keywords: Option[NonEmptyString]
 )
 object Country:
   def parseCountry(line: Array[String]): Either[InvalidLine, Country] =
     (
       Try(line(0).toLong).toOption,
-      NonEmptyString.orNone(line(1)),
+      IsoCountryType.orNone(line(1)),
       NonEmptyString.orNone(line(2)),
       Try(ContinentType.valueOf(line(3))).toOption
     ).match {
@@ -30,8 +30,9 @@ object Country:
             NonEmptyString.orNone(line(5))
           )
         )
-      case (None, _, _, _) => Left(InvalidLine("", line(0)))
-      case (_, None, _, _) => Left(InvalidLine("", line(0)))
-      case (_, _, None, _) => Left(InvalidLine("", line(0)))
-      case (_, _, _, None) => Left(InvalidLine("", line(0)))
+      case (None, _, _, _) =>
+        Left(InvalidLine("Invalid id on line " + line.mkString(","), line(0)))
+      case (_, None, _, _) => Left(InvalidLine("", line(1)))
+      case (_, _, None, _) => Left(InvalidLine("", line(2)))
+      case (_, _, _, None) => Left(InvalidLine("", line(3)))
     }
