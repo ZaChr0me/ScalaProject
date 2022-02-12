@@ -12,11 +12,13 @@ object Code2Letters:
   def apply(s: String): Code2Letters = s
 
 object StringToBoolean:
-  def apply(s: String): Option[Boolean] = if (s == "1") Some(true)
-  else if (s == "0") Some(false)
-  else s.toBooleanOption
+  def apply(s: String): Option[Boolean] = s.toLowerCase.match {
+    case "1" | "yes" | "true" => Some(true)
+    case "0" | "no" | "false" => Some(false)
+    case _                    => None
+  }
 
-trait SpecificLengthString:
+trait SpecificLengthString {
   enum ContentType(val regex: Regex) {
     case UpperText extends ContentType("[A-Z]+".r)
     case UpperTextAndNumbers extends ContentType("[A-Z0-9]+".r)
@@ -41,3 +43,4 @@ trait SpecificLengthString:
       Some(s)
     else
       None
+}

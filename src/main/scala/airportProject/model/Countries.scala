@@ -11,7 +11,7 @@ class Country(
     keywords: Option[NonEmptyString]
 )
 object Country:
-  def parseCountry(line: Array[String]): Option[Country] =
+  def parseCountry(line: Array[String]): Either[InvalidLine, Country] =
     (
       Try(line(0).toLong).toOption,
       NonEmptyString.orNone(line(1)),
@@ -20,7 +20,7 @@ object Country:
     ).match {
       //check for how to implement toEither instead? for more error handling?
       case (Some(i), Some(code), Some(name), Some(cnt)) =>
-        Some(
+        Right(
           Country(
             i,
             code,
@@ -30,8 +30,8 @@ object Country:
             NonEmptyString.orNone(line(5))
           )
         )
-      case (None, _, _, _) => None
-      case (_, None, _, _) => None
-      case (_, _, None, _) => None
-      case (_, _, _, None) => None
+      case (None, _, _, _) => Left(InvalidLine("", line(0)))
+      case (_, None, _, _) => Left(InvalidLine("", line(0)))
+      case (_, _, None, _) => Left(InvalidLine("", line(0)))
+      case (_, _, _, None) => Left(InvalidLine("", line(0)))
     }

@@ -8,43 +8,66 @@ import airportProject.service._
 
 class Airport(
     id: Int, //0
-    ident: String, //1
+    ident: AirportIdentType, //1
     airportType: AirportType, //2
     name: NonEmptyString, //3
     continent: ContinentType, //7
-    isoCountry: NonEmptyString, //8
-    isoRegion: String, //9
-    municipality: String, //10
+    isoCountry: IsoCountryType, //8
+    isoRegion: IsoRegionType, //9
+    municipality: NonEmptyString, //10
     scheduledService: Option[Boolean], //11
-    gpsCode: Option[String], //12
-    iataCode: Option[String], //13
-    localCode: Option[String], //14
-    homeLink: Option[String], //15
-    wikipediaLink: Option[String], //16
-    keywords: Option[String] //17
+    gpsCode: Option[NonEmptyString], //12
+    iataCode: Option[NonEmptyString], //13
+    localCode: Option[NonEmptyString], //14
+    homeLink: Option[NonEmptyString], //15
+    wikipediaLink: Option[NonEmptyString], //16
+    keywords: Option[NonEmptyString] //17
 )
 //TODO recheck later what is optional and what is absolutely needed
 object Airport:
   def parseAirport(line: Array[String]): Option[Airport] =
     (
       Try(line(0).toInt).toOption,
-      line(1),
+      AirportIdentType.orNone(line(1)),
       Try(AirportType.valueOf(line(2))).toOption,
-      line(3),
-      Try(AirportType.valueOf(line(7))).toOption,
-      line(8),
-      line(9),
-      line(10)
+      NonEmptyString.orNone(line(3)),
+      Try(ContinentType.valueOf(line(7))).toOption,
+      IsoCountryType.orNone(line(8)),
+      IsoRegionType.orNone(line(9)),
+      NonEmptyString.orNone(line(10))
     ).match {
       //check for how to implement toEither instead? for more error handling?
-      case (Some(i), ident, Some(at), name, Some(ctn), isoC, isoR, municip) =>
-        Some(Airport(i, ident, at, name, ct, isoC, isoR, municip))
+      case (
+            Some(i),
+            Some(ident),
+            Some(at),
+            Some(name),
+            Some(ctn),
+            Some(isoC),
+            Some(isoR),
+            Some(municip)
+          ) =>
+        Some(
+          Airport(
+            i,
+            ident,
+            at,
+            name,
+            ctn,
+            isoC,
+            isoR,
+            municip,
+            StringToBoolean(line(11)),
+            NonEmptyString.orNone(line(12)),
+            NonEmptyString.orNone(line(13)),
+            NonEmptyString.orNone(line(14)),
+            NonEmptyString.orNone(line(15)),
+            NonEmptyString.orNone(line(16)),
+            NonEmptyString.orNone(line(17))
+          )
+        )
 
       case (None, _, _, _, _) => None //line 0 alias ID is incorrect
       case (_, _, Some(at), _, _) =>
         None //line 2 alias the airport type is incorrect
-    }
-    def temp() = {
-      val aTest: AirportType = AirportType.Heliport
-      aTest.toString
     }
