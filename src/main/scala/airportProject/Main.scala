@@ -51,86 +51,20 @@ def queryWork(
 
 def reportWork(database: Database, reportType: String) = {
   reportType.match {
-    case "countries" => parseReportCountries(database)
-    case "surface"   => parseReportSurface(database)
-    case "latitude"  => parseReportLatitude(database)
+    case "countries" => database.parseReportCountries()
+    case "surface"   => database.parseReportSurface()
+    case "latitude"  => database.parseReportLatitude()
   }
 }
 
 def queryCode(countryCode: String, database: Database) = {
   val result: List[(Airport, List[Runway])] =
-    parseCountryCode(database, countryCode)
+    database.parseCountryCode(countryCode)
 }
 
 def queryName(countryName: String, database: Database) = {
   val result: List[(Airport, List[Runway])] =
-    parseCountryName(database, countryName)
+    database.parseCountryName(countryName)
 }
 
-def parseCountryCode(
-    database: Database,
-    countryCode: String
-): List[(Airport, List[Runway])] = database.airports
-  .filter(airport => { airport.isoCountry == countryCode })
-  .map(airport =>
-    (
-      airport,
-      database.runways.filter(x => {
-        x.airportIdent == airport.ident && x.airportRef == airport.id
-      })
-    )
-  )
 
-def parseCountryName(
-    database: Database,
-    countryName: String
-): List[(Airport, List[Runway])] = database.airports
-  .filter(airport => { airport.name == countryName })
-  .map(airport =>
-    (
-      airport,
-      database.runways.filter { runway =>
-        (runway.airportRef == airport.id && runway.airportIdent == airport.ident)
-      }
-    )
-  )
-
-def parseReportCountries(database: Database): List[(Country, Int)] =
-  database.countries
-    .map(country =>
-      (
-        country,
-        database.airports
-          .filter(airport => (airport.isoCountry == country.code))
-          .size
-      )
-    )
-    .sortWith(_._2 > _._2)
-    .filter((x, y) => y < 10 && y > (database.countries.size - 10))
-
-def parseReportSurface(database: Database): List[(Country, List[String])] =
-  database.countries
-    .map(country =>
-      (
-        country,
-        database.runways
-          .filter(runway =>
-            database.airports
-              .filter(airport => (airport.isoCountry == country.code))
-              .contains(runway.airportIdent)
-          )
-          .map(_.surface)
-          .map(_.toUpperCase)
-          .distinct
-      )
-    )
-
-def parseReportLatitude(database: Database): List[(String, Int)] =
-  database.runways
-    .map(runway =>
-      (
-        String(runway.leIdent),
-        database.runways.filter(x => x.leIdent == runway.leIdent).size
-      )
-    )
-    .distinct
