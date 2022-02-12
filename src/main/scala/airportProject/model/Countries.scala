@@ -32,7 +32,10 @@ object Country:
         )
       case (None, _, _, _) =>
         Left(InvalidLine("Invalid id on line " + line.mkString(","), line(0)))
-      case (_, None, _, _) => Left(InvalidLine("", line(1)))
-      case (_, _, None, _) => Left(InvalidLine("", line(2)))
-      case (_, _, _, None) => Left(InvalidLine("", line(3)))
+      case (_, None, _, _) => 
+        Left(InvalidLine("Invalide Country code on line " + line.mkString(","), line(1)))
+      case (_, _, None, _) => 
+        Left(InvalidLine("Invalid name on line" + line.mkString(","), line(2)))
+      case (_, _, _, None) => 
+        Left(InvalidLine("Invalid Continent on line " + line.mkString(","), line(3)))
     }

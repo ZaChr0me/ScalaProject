@@ -45,8 +45,8 @@ class Database(
         )
     else null //TODO
   }
-  def parseReportCountries(): List[(Country, Int)] =
-    countries
+  def parseReportCountries(): List[(Country, Int)] = {
+    val list = countries
       .map(country =>
         (
           country,
@@ -56,7 +56,11 @@ class Database(
         )
       )
       .sortWith(_._2 > _._2)
-      .filter((x, y) => y < 10 && y > (countries.size - 10))
+
+      list.slice(0, 10) ++ list.slice(list.size-10, list.size)
+  }
+    
+
 
   def parseReportSurface(): List[(Country, List[String])] =
     countries

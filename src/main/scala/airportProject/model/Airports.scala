@@ -65,12 +65,20 @@ object Airport:
             NonEmptyString.orNone(line(17))
           )
         )
-      case (None, _, _, _, _, _, _, _) => Left(InvalidLine("", line(0)))
-      case (_, None, _, _, _, _, _, _) => Left(InvalidLine("", line(1)))
-      case (_, _, None, _, _, _, _, _) => Left(InvalidLine("", line(2)))
-      case (_, _, _, None, _, _, _, _) => Left(InvalidLine("", line(3)))
-      case (_, _, _, _, None, _, _, _) => Left(InvalidLine("", line(7)))
-      case (_, _, _, _, _, None, _, _) => Left(InvalidLine("", line(8)))
-      case (_, _, _, _, _, _, None, _) => Left(InvalidLine("", line(9)))
-      case (_, _, _, _, _, _, _, None) => Left(InvalidLine("", line(10)))
+      case (None, _, _, _, _, _, _, _) => 
+        Left(InvalidLine("Invalid id on line " + line.mkString(","), line(0)))
+      case (_, None, _, _, _, _, _, _) => 
+        Left(InvalidLine("Invalid Ident on line " + line.mkString(","), line(1)))
+      case (_, _, None, _, _, _, _, _) => 
+        Left(InvalidLine("Invalid airport type on line " + line.mkString(","), line(2)))
+      case (_, _, _, None, _, _, _, _) => 
+        Left(InvalidLine("Invalid name on line " + line.mkString(","), line(3)))
+      case (_, _, _, _, None, _, _, _) => 
+        Left(InvalidLine("Invalid continent on line " + line.mkString(","), line(7)))
+      case (_, _, _, _, _, None, _, _) => 
+        Left(InvalidLine("Invalid country code on line " + line.mkString(","), line(8)))
+      case (_, _, _, _, _, _, None, _) => 
+        Left(InvalidLine("Invalid region code on line " + line.mkString(","), line(9)))
+      case (_, _, _, _, _, _, _, None) => 
+        Left(InvalidLine("Invalid municipality on line " + line.mkString(","), line(10)))
     }

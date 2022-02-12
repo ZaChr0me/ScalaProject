@@ -89,16 +89,29 @@ def queryWork(
 def reportWork(database: Database, reportType: ReportType) = {
 
   reportType.match {
-    case ReportType.Countries => database.parseReportCountries()
-    case ReportType.Surfaces  => database.parseReportSurface()
-    case ReportType.Latitude  => database.parseReportLatitude()
-  }.match {
+    case ReportType.Countries => database.parseReportCountries().zipWithIndex.foreach((countryValueTuple, i) =>
+        printf(
+          i.toString + " ranked Country " + countryValueTuple._1.name.toString + " has " + countryValueTuple._2 + " runways\n"
+        )
+      )
+    case ReportType.Surfaces => database.parseReportSurface().foreach((c, subl) =>
+        printf(
+          "Country " + c.name.toString + " has the following types of runways: " + subl
+            .mkString(",")
+        )
+      )
+    case ReportType.Latitude => database.parseReportLatitude().zipWithIndex.foreach((latitude, i) =>
+        printf(
+          i.toString + " ranked latitude " + latitude._1 + " is used " + latitude._2.toString + " times\n"
+        )
+      )
+  }
+  
+  /*.match {
     case l: List[(Country, Int)] =>
-      printf("\nrunning here\n")
-      printf(l.length.toString)
       l.zipWithIndex.foreach((countryValueTuple, i) =>
         printf(
-          i.toString + " ranked Country " + countryValueTuple._1.name.toString + " has " + countryValueTuple._2 + " runways"
+          i.toString + " ranked Country " + countryValueTuple._1.name.toString + " has " + countryValueTuple._2 + " runways\n"
         )
       )
     case l: List[(Country, List[String])] =>
@@ -111,10 +124,10 @@ def reportWork(database: Database, reportType: ReportType) = {
     case l: List[(String, Int)] =>
       l.zipWithIndex.foreach((latitude, i) =>
         printf(
-          i.toString + " ranked latitude " + latitude._1 + " is used " + latitude._2.toString + " times"
+          i.toString + " ranked latitude " + latitude._1 + " is used " + latitude._2.toString + " times\n"
         )
       )
-  }
+  }*/
 }
 
 def queryCode(

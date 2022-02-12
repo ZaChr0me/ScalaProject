@@ -7,7 +7,7 @@ import org.scalatest.matchers.must.Matchers
 
 class CSVSpec extends AnyFlatSpec with Matchers:
   import Point._
-
+/*
   "CSV" should "read a valid csv" in {
     CSV.read("validLines.csv", Point.fromCsvLine).nbInvalidLine must be(0)
     CSV.read("validLines.csv", Point.fromCsvLine).lines.toSeq must contain theSameElementsAs List(
@@ -28,5 +28,5 @@ class CSVSpec extends AnyFlatSpec with Matchers:
     CSV.read("invalidLines.csv", Point.fromCsvLine).nbInvalidLine must be(4)
     CSV.read("invalidLines.csv", Point.fromCsvLine).lines.toSeq mustBe empty
   }
-
+*/
 

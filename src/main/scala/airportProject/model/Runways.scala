@@ -5,11 +5,11 @@ import scala.util.Try
 //id,airport ref,airport ident,surface,
 
 class Runway(
-    val id: Long,
-    val airportRef: Long,
-    val airportIdent: NonEmptyString,
-    val surface: NonEmptyString,
-    val leIdent: AirportLeIndentType,
+    val id: Long,//0
+    val airportRef: Long,//1
+    val airportIdent: NonEmptyString,//2
+    val surface: NonEmptyString,//5
+    val leIdent: AirportLeIndentType,//8
     val length: Option[Int], //3
     val width: Option[Int], //4
     val lighted: Option[Boolean], //6
@@ -67,9 +67,14 @@ object Runway:
             line(19).toIntOption
           )
         )
-      case (None, _, _, _, _) => Left(InvalidLine("", line(0)))
-      case (_, None, _, _, _) => Left(InvalidLine("", line(1)))
-      case (_, _, None, _, _) => Left(InvalidLine("", line(5)))
-      case (_, _, _, None, _) => Left(InvalidLine("", line(2)))
-      case (_, _, _, _, None) => Left(InvalidLine("", line(8)))
+      case (None, _, _, _, _) => 
+        Left(InvalidLine("Invalid id on line " + line.mkString(","), line(0)))
+      case (_, None, _, _, _) => 
+        Left(InvalidLine("Invalid reference on line " + line.mkString(","), line(1)))
+      case (_, _, None, _, _) => 
+        Left(InvalidLine("Invalid Ident on line " + line.mkString(","), line(5)))
+      case (_, _, _, None, _) => 
+        Left(InvalidLine("Invalid surface on line " + line.mkString(","), line(2)))
+      case (_, _, _, _, None) => 
+        Left(InvalidLine("Invalid le Ident on line " + line.mkString(","), line(8)))
     }
