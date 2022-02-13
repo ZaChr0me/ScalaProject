@@ -51,7 +51,7 @@ class Database(
         (
           country,
           airports
-            .filter(airport => (airport.isoCountry == country.code))
+            .filter(airport => {airport.isoCountry == country.code})
             .size
         )
       )
@@ -69,7 +69,8 @@ class Database(
             .filter(runway =>
               airports
                 .filter(airport => (airport.isoCountry == country.code))
-                .contains(runway.airportIdent)
+                .map(_.id)
+                .contains(runway.airportRef.toInt)
             )
             .map(_.surface)
             .map(_.toString.toUpperCase)

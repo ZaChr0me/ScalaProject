@@ -40,10 +40,11 @@ class DatabaseSpec extends AnyFlatSpec with Matchers {
       )
       .right
       .get
-      
 
     database.parseCountryCode(IsoCountryType.orNone("US").get).size must be(3)
-    database.parseCountryCode(IsoCountryType.orNone("US").get).foreach((a, r) => r.size must be(1))
+    database
+      .parseCountryCode(IsoCountryType.orNone("US").get)
+      .foreach((a, r) => r.size must be(1))
   }
 
   "Database" should "Send every airport and runways of a country using his country name" in {
@@ -56,14 +57,17 @@ class DatabaseSpec extends AnyFlatSpec with Matchers {
       )
       .right
       .get
-      
 
-    database.parseCountryName(NonEmptyString.orNone("United States").get).size must be(3)
-    database.parseCountryName(NonEmptyString.orNone("United States").get).foreach((a, r) => r.size must be(1))
+    database
+      .parseCountryName(NonEmptyString.orNone("United States").get)
+      .size must be(3)
+    database
+      .parseCountryName(NonEmptyString.orNone("United States").get)
+      .foreach((a, r) => r.size must be(1))
   }
 
-  "Database" should "Give the first 10 and last 10 countries" in {
-      val database = Database
+  "Database" should "Give the first 10 and last 10 countries with parseReportCountries" in {
+    val database = Database
       .initializeFromCsv(
         60,
         "airports.csv",
@@ -73,7 +77,36 @@ class DatabaseSpec extends AnyFlatSpec with Matchers {
       .right
       .get
 
-      database.parseReportCountries().size must be(20)
+    database.parseReportCountries().size must be(20)
   }
 
+  "Database" should "give the list of countries and their surface types with parseReportSurface" in {
+    val database = Database
+      .initializeFromCsv(
+        100,
+        "tests/airportsTest.csv",
+        "tests/countriesTest.csv",
+        "tests/runwaysTest.csv"
+      )
+      .right
+      .get
+
+    database.parseReportSurface().size must be(2)
+    database.parseReportSurface().head._2.size must be (3)
+  }
+
+  "Database" should "give the list of latitudes and the number of time they appear with parseReportLatitude" in {
+    val database = Database
+      .initializeFromCsv(
+        100,
+        "tests/airportsTest.csv",
+        "tests/countriesTest.csv",
+        "tests/runwaysTest.csv"
+      )
+      .right
+      .get
+
+      database.parseReportLatitude().size must be(3)
+      database.parseReportLatitude().foreach(data => data._2 must be(1))
+  } 
 }
