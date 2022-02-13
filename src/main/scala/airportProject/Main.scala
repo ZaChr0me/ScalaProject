@@ -15,7 +15,7 @@ enum ReportOrQuery {
 }
 
 def initialize(): Either[List[InvalidLine], Database] =
-  Database.initializeFromCsv(60)
+  Database.initializeFromCsv(60, "airports.csv", "countries.csv", "runways.csv")
 
 def main(args: Array[String]): Unit = {
   val database = initialize()
@@ -89,24 +89,35 @@ def queryWork(
 def reportWork(database: Database, reportType: ReportType) = {
 
   reportType.match {
-    case ReportType.Countries => database.parseReportCountries().zipWithIndex.foreach((countryValueTuple, i) =>
-        printf(
-          i.toString + " ranked Country " + countryValueTuple._1.name.toString + " has " + countryValueTuple._2 + " runways\n"
+    case ReportType.Countries =>
+      database
+        .parseReportCountries()
+        .zipWithIndex
+        .foreach((countryValueTuple, i) =>
+          printf(
+            i.toString + " ranked Country " + countryValueTuple._1.name.toString + " has " + countryValueTuple._2 + " runways\n"
+          )
         )
-      )
-    case ReportType.Surfaces => database.parseReportSurface().foreach((c, subl) =>
-        printf(
-          "Country " + c.name.toString + " has the following types of runways: " + subl
-            .mkString(",")
+    case ReportType.Surfaces =>
+      database
+        .parseReportSurface()
+        .foreach((c, subl) =>
+          printf(
+            "Country " + c.name.toString + " has the following types of runways: " + subl + "\n"
+              .mkString(",")
+          )
         )
-      )
-    case ReportType.Latitude => database.parseReportLatitude().zipWithIndex.foreach((latitude, i) =>
-        printf(
-          i.toString + " ranked latitude " + latitude._1 + " is used " + latitude._2.toString + " times\n"
+    case ReportType.Latitude =>
+      database
+        .parseReportLatitude()
+        .zipWithIndex
+        .foreach((latitude, i) =>
+          printf(
+            i.toString + " ranked latitude " + latitude._1 + " is used " + latitude._2.toString + " times\n"
+          )
         )
-      )
   }
-  
+
   /*.match {
     case l: List[(Country, Int)] =>
       l.zipWithIndex.foreach((countryValueTuple, i) =>
