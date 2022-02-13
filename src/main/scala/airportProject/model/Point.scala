@@ -1,4 +1,4 @@
-package fileReader.model
+package airportProject.model
 
 import scala.util.Try
 

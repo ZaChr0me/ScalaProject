@@ -1,35 +1,80 @@
 package airportProject.model
-
+import airportProject.service._
+import scala.util.Try
 //Runways need :
 //id,airport ref,airport ident,surface,
 
 class Runway(
-    id: Long,
-    airportRef: Long,
-    airportIdent: String,
-    surface: String,
-    length: Int = 0,
-    width: Int = 0,
-    lighted: Int = 0,
-    closed: Int = 0,
-    leIdent: String = "",
-    leLatitude: Float = 0,
-    leLongitude: Float = 0,
-    leElevation: Int = 0,
-    leHeadingDegT: Float = 0,
-    leDisplacedThreshold: Int = 0,
-    heIdent: String = "",
-    heLatitude: Float = 0,
-    heLongitude: Float = 0,
-    heElevation: Int = 0,
-    heHeadingDegT: Float = 0,
-    heDisplacedThreshold: Int = 0
+    val id: Long,//0
+    val airportRef: Long,//1
+    val airportIdent: NonEmptyString,//2
+    val surface: NonEmptyString,//5
+    val leIdent: AirportLeIndentType,//8
+    val length: Option[Int], //3
+    val width: Option[Int], //4
+    val lighted: Option[Boolean], //6
+    val closed: Option[Boolean], //7
+    val leLatitude: Option[String], //9
+    val leLongitude: Option[String], //10
+    val leElevation: Option[Int], //11
+    val leHeadingDegT: Option[String], //12
+    val leDisplacedThreshold: Option[Int], //13
+    val heIdent: Option[String], //14
+    val heLatitude: Option[String], //15
+    val heLongitude: Option[String], //16
+    val heElevation: Option[Int], //17
+    val heHeadingDegT: Option[String], //18
+    val heDisplacedThreshold: Option[Int] //19
 )
 
 object Runway:
-    def parseRunway(line: Array[String]): Option[Runway] =
-        (Try(line(0).toLong).toOption, Try(line(1).toLong).toOption, line(2), line(5)).match {
-            case (Some(id), Some(airportId), airportIdent, surface) =>
-                Some(Runway(id, airportId, airportIdent, surface))
-            case (None, _, _, _) => None
-        }
+  def parseRunway(line: Array[String]): Either[InvalidLine, Runway] =
+    (
+      Try(line(0).toLong).toOption,
+      Try(line(1).toLong).toOption,
+      NonEmptyString.orNone(line(5)),
+      NonEmptyString.orNone(line(2)),
+      AirportLeIndentType.orNone(line(8))
+    ).match {
+      case (
+            Some(id),
+            Some(airportId),
+            Some(airportIdent),
+            Some(surface),
+            Some(leIndent)
+          ) =>
+        Right(
+          Runway(
+            id,
+            airportId,
+            airportIdent,
+            surface,
+            leIndent,
+            line(3).toIntOption,
+            line(4).toIntOption,
+            StringToBoolean(line(6)),
+            StringToBoolean(line(7)),
+            Option(line(9)),
+            Option(line(10)),
+            line(11).toIntOption,
+            Option(line(12)),
+            line(13).toIntOption,
+            Option(line(14)),
+            Option(line(15)),
+            Option(line(16)),
+            line(17).toIntOption,
+            Option(line(18)),
+            line(19).toIntOption
+          )
+        )
+      case (None, _, _, _, _) => 
+        Left(InvalidLine("Invalid id on line " + line.mkString(","), line(0)))
+      case (_, None, _, _, _) => 
+        Left(InvalidLine("Invalid reference on line " + line.mkString(","), line(1)))
+      case (_, _, None, _, _) => 
+        Left(InvalidLine("Invalid Ident on line " + line.mkString(","), line(5)))
+      case (_, _, _, None, _) => 
+        Left(InvalidLine("Invalid surface on line " + line.mkString(","), line(2)))
+      case (_, _, _, _, None) => 
+        Left(InvalidLine("Invalid le Ident on line " + line.mkString(","), line(8)))
+    }
