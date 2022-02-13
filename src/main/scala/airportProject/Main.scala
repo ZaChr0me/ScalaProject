@@ -29,7 +29,7 @@ def main(args: Array[String]): Unit = {
     //input user choice between query and reports
     val reportOrQuery: ReportOrQuery = ReportOrQuery.Report
 
-    val reportType = ReportType.Latitude
+    val reportType = ReportType.Surfaces
     //for now, and to go faster, main is used as manual testing, while the core app
     //isn't done, and the work on gui hasn't started
 
