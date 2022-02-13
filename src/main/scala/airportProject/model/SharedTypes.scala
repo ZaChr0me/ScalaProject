@@ -9,7 +9,6 @@ sealed abstract class UpperTextAndNumbers() extends SealedRegex("[A-Z0-9]+".r)
 sealed abstract class UpperText() extends SealedRegex("[A-Z]+".r)
 sealed abstract class IsoRegionRegex()
     extends SealedRegex("[A-Z][A-Z]-[A-Z-0-9]+".r)
-
 //lowercase are needed to convert from strings
 enum AirportType {
   case heliport, smallairport, mediumairport, largeairport, balloonport,

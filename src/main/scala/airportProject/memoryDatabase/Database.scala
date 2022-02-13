@@ -57,10 +57,8 @@ class Database(
       )
       .sortWith(_._2 > _._2)
 
-      list.slice(0, 10) ++ list.slice(list.size-10, list.size)
+    list.slice(0, 10) ++ list.slice(list.size - 10, list.size)
   }
-    
-
 
   def parseReportSurface(): List[(Country, List[String])] =
     countries
