@@ -9,13 +9,23 @@ class DatabaseSpec extends AnyFlatSpec with Matchers {
 
   "Database" should "Stop if the number of invalid lines is too high" in {
     Database
-      .initializeFromCsv(100, "airports.csv", "countries.csv", "runways.csv")
+      .initializeFromCsv(
+        100,
+        "src/main/resources/airports.csv",
+        "src/main/resources/countries.csv",
+        "src/main/resources/runways.csv"
+      )
       .isLeft must be(true)
   }
 
   "Database" should "Initialize successfully at least 60 percent of the 3 given csv" in {
     Database
-      .initializeFromCsv(60, "airports.csv", "countries.csv", "runways.csv")
+      .initializeFromCsv(
+        60,
+        "src/main/resources/airports.csv",
+        "src/main/resources/countries.csv",
+        "src/main/resources/runways.csv"
+      )
       .isLeft must be(false)
   }
 
@@ -23,9 +33,9 @@ class DatabaseSpec extends AnyFlatSpec with Matchers {
     Database
       .initializeFromCsv(
         100,
-        "tests/airportsTest.csv",
-        "tests/countriesTest.csv",
-        "tests/runwaysTest.csv"
+        "src/main/data/tests/airportsTest.csv",
+        "src/main/data/tests/countriesTest.csv",
+        "src/main/data/tests/runwaysTest.csv"
       )
       .isLeft must be(false)
   }
@@ -34,9 +44,9 @@ class DatabaseSpec extends AnyFlatSpec with Matchers {
     val database = Database
       .initializeFromCsv(
         100,
-        "tests/airportsTest.csv",
-        "tests/countriesTest.csv",
-        "tests/runwaysTest.csv"
+        "src/main/data/tests/airportsTest.csv",
+        "src/main/data/tests/countriesTest.csv",
+        "src/main/data/tests/runwaysTest.csv"
       )
       .right
       .get
@@ -51,9 +61,9 @@ class DatabaseSpec extends AnyFlatSpec with Matchers {
     val database = Database
       .initializeFromCsv(
         100,
-        "tests/airportsTest.csv",
-        "tests/countriesTest.csv",
-        "tests/runwaysTest.csv"
+        "src/main/data/tests/airportsTest.csv",
+        "src/main/data/tests/countriesTest.csv",
+        "src/main/data/tests/runwaysTest.csv"
       )
       .right
       .get
@@ -70,9 +80,9 @@ class DatabaseSpec extends AnyFlatSpec with Matchers {
     val database = Database
       .initializeFromCsv(
         60,
-        "airports.csv",
-        "countries.csv",
-        "runways.csv"
+        "src/main/resources/airports.csv",
+        "src/main/resources/countries.csv",
+        "src/main/resources/runways.csv"
       )
       .right
       .get
@@ -84,29 +94,29 @@ class DatabaseSpec extends AnyFlatSpec with Matchers {
     val database = Database
       .initializeFromCsv(
         100,
-        "tests/airportsTest.csv",
-        "tests/countriesTest.csv",
-        "tests/runwaysTest.csv"
+        "src/main/data/tests/airportsTest.csv",
+        "src/main/data/tests/countriesTest.csv",
+        "src/main/data/tests/runwaysTest.csv"
       )
       .right
       .get
 
     database.parseReportSurface().size must be(2)
-    database.parseReportSurface().head._2.size must be (3)
+    database.parseReportSurface().head._2.size must be(3)
   }
 
   "Database" should "give the list of latitudes and the number of time they appear with parseReportLatitude" in {
     val database = Database
       .initializeFromCsv(
         100,
-        "tests/airportsTest.csv",
-        "tests/countriesTest.csv",
-        "tests/runwaysTest.csv"
+        "src/main/data/tests/airportsTest.csv",
+        "src/main/data/tests/countriesTest.csv",
+        "src/main/data/tests/runwaysTest.csv"
       )
       .right
       .get
 
-      database.parseReportLatitude().size must be(3)
-      database.parseReportLatitude().foreach(data => data._2 must be(1))
-  } 
+    database.parseReportLatitude().size must be(3)
+    database.parseReportLatitude().foreach(data => data._2 must be(1))
+  }
 }

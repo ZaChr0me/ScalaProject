@@ -26,8 +26,13 @@ enum ReportOrQuery {
   case Report, Query
 }
 
-def initialize(): Either[List[InvalidLine], Database] =
-  Database.initializeFromCsv(60, "airports.csv", "countries.csv", "runways.csv")
+def initialize: Either[List[InvalidLine], Database] =
+  Database.initializeFromCsv(
+    60,
+    "src/main/resources/airports.csv",
+    "src/main/resources/countries.csv",
+    "src/main/resources/runways.csv"
+  )
 
 object ScalaFXHelloWorld extends JFXApp3 {
   override def start(): Unit = {
@@ -38,6 +43,18 @@ object ScalaFXHelloWorld extends JFXApp3 {
         if (InvalidLine.getElement(line) != "")
           printf(InvalidLine.print(line) + "\n")
       })
+      stage = new JFXApp3.PrimaryStage {
+        title = "Airport Project"
+
+        scene = new Scene(100, 50) {
+          root = new BorderPane {
+            id = "mainPagePanel"
+            center = new Label(
+              "There was an error initializing the database, check the files you wish to use"
+            )
+          }
+        }
+      }
     } else if (database.isRight) {
 
       val queryPane = QueryPane.getContent
@@ -52,7 +69,6 @@ object ScalaFXHelloWorld extends JFXApp3 {
           database.right.get,
           false
         )
-
         if (query.isDefined) {
           queryPane.setContent(query.get)
         }

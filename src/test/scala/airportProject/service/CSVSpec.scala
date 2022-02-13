@@ -9,33 +9,33 @@ class CSVSpec extends AnyFlatSpec with Matchers:
 
   "CSV" should "read a valid airport csv" in {
     CSV
-      .read("tests/airportsTest.csv", Airport.parseAirport)
+      .read("src/main/data/tests/airportsTest.csv", Airport.parseAirport)
       .invalidLines
       .size must be(0)
     CSV
-      .read("tests/airportsTest.csv", Airport.parseAirport)
+      .read("src/main/data/tests/airportsTest.csv", Airport.parseAirport)
       .validLines
       .size must be(3)
   }
 
   "CSV" should "read a valid country csv" in {
     CSV
-      .read("tests/countriesTest.csv", Country.parseCountry)
+      .read("src/main/data/tests/countriesTest.csv", Country.parseCountry)
       .invalidLines
       .size must be(0)
     CSV
-      .read("tests/countriesTest.csv", Country.parseCountry)
+      .read("src/main/data/tests/countriesTest.csv", Country.parseCountry)
       .validLines
       .size must be(2)
   }
 
   "CSV" should "read a valid runway csv" in {
     CSV
-      .read("tests/runwaysTest.csv", Runway.parseRunway)
+      .read("src/main/data/tests/runwaysTest.csv", Runway.parseRunway)
       .invalidLines
       .size must be(0)
     CSV
-      .read("tests/runwaysTest.csv", Runway.parseRunway)
+      .read("src/main/data/tests/runwaysTest.csv", Runway.parseRunway)
       .validLines
       .size must be(3)
   }

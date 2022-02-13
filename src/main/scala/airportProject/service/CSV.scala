@@ -27,7 +27,7 @@ object CSV:
       regex: String = ","
   ) = {
     val (parsedLine, invalidLine) = Option(
-      Files.lines(Path.of(s"src/main/data/$fileName"))
+      Files.lines(Path.of(fileName))
     )
       .map(_.iterator().asScala)
       .getOrElse(Iterator.empty) // if file can't be read option will be a none.
