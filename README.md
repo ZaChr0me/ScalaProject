@@ -27,6 +27,7 @@ sbt run
 ## Contributions
 
 Zénon Taleux: ZaChr0me
+
 Lucas Laville: Dayonos or Name (My Git on  desktop doesn't give the right name on commits)
 
 ## Librairies
