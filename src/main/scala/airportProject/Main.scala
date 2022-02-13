@@ -15,7 +15,7 @@ enum ReportOrQuery {
 }
 
 def initialize(): Either[List[InvalidLine], Database] =
-  Database.initializeFromCsv(60)
+  Database.initializeFromCsv(60, "airports.csv", "countries.csv", "runways.csv")
 
 def main(args: Array[String]): Unit = {
   val database = initialize()
@@ -29,7 +29,7 @@ def main(args: Array[String]): Unit = {
     //input user choice between query and reports
     val reportOrQuery: ReportOrQuery = ReportOrQuery.Report
 
-    val reportType = ReportType.Surfaces
+    val reportType = ReportType.Countries
     //for now, and to go faster, main is used as manual testing, while the core app
     //isn't done, and the work on gui hasn't started
 
