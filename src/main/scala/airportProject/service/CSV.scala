@@ -7,6 +7,7 @@ final case class ReadResult[A](
     val validLines: List[A],
     val invalidLines: List[InvalidLine]
 ):
+  //useful for testing internally
   def print = printf(
     validLines.length.toString + "\t" + invalidLines.length.toString + "\n"
   )
