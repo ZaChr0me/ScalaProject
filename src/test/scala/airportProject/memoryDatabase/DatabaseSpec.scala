@@ -7,8 +7,8 @@ class DatabaseSpec extends AnyFlatSpec with Matchers{
     
     
 
-    "Database" should "Send every airports and runways in a country specified by a country code" in {
-
+    "Database" should "Stop if the number of invalid lines is too high" in {
+        Database.initializeFromCsv(100).isLeft must be(true)
     }
   
 }
