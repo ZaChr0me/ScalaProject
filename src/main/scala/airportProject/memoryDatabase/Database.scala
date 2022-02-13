@@ -51,7 +51,7 @@ class Database(
         (
           country,
           airports
-            .filter(airport => (airport.isoCountry == country.code))
+            .filter(airport => {airport.isoCountry == country.code})
             .size
         )
       )
@@ -69,7 +69,8 @@ class Database(
             .filter(runway =>
               airports
                 .filter(airport => (airport.isoCountry == country.code))
-                .contains(runway.airportIdent)
+                .map(_.id)
+                .contains(runway.airportRef.toInt)
             )
             .map(_.surface)
             .map(_.toString.toUpperCase)
@@ -92,22 +93,25 @@ object Database {
   private def getValidPercent[A](rr: ReadResult[A]): Int =
     rr.validLines.length * 100 / (rr.validLines.length + rr.invalidLines.length)
   def initializeFromCsv(
-      validLinePercentRequired: Int
+      validLinePercentRequired: Int,
+      airportsFileName: String,
+      countriesFileName: String,
+      runwaysFileName: String
   ): Either[List[InvalidLine], Database] = {
     val airportsLines: ReadResult[Airport] =
-      CSV.read("airports.csv", Airport.parseAirport)
+      CSV.read(airportsFileName, Airport.parseAirport)
     if (getValidPercent(airportsLines) < validLinePercentRequired)
       Left(airportsLines.invalidLines)
     else {
 
       val countriesLines: ReadResult[Country] =
-        CSV.read("countries.csv", Country.parseCountry)
+        CSV.read(countriesFileName, Country.parseCountry)
       if (getValidPercent(countriesLines) < validLinePercentRequired)
         Left(countriesLines.invalidLines)
       else {
 
         val runwaysLines: ReadResult[Runway] =
-          CSV.read("runways.csv", Runway.parseRunway)
+          CSV.read(runwaysFileName, Runway.parseRunway)
         if (getValidPercent(runwaysLines) < validLinePercentRequired)
           Left(runwaysLines.invalidLines)
         else

@@ -26,8 +26,8 @@ enum ReportOrQuery {
   case Report, Query
 }
 
-def initialize: Either[List[InvalidLine], Database] =
-  Database.initializeFromCsv(60)
+def initialize(): Either[List[InvalidLine], Database] =
+  Database.initializeFromCsv(60, "airports.csv", "countries.csv", "runways.csv")
 
 object ScalaFXHelloWorld extends JFXApp3 {
   override def start(): Unit = {

@@ -28,7 +28,7 @@ class ParserSpec extends AnyFlatSpec with Matchers:
       "",
       ""
     )
-    val validAirportParsed = Airport(
+    val validAirportParsedExpected = Airport(
       6523,
       NonEmptyString.orNone("00A").get,
       AirportType.valueOf("heliport"),
@@ -45,19 +45,25 @@ class ParserSpec extends AnyFlatSpec with Matchers:
       None,
       None
     )
-    Airport.parseAirport(validAirport).isRight must be(true)
-    Airport.parseAirport(validAirport).contains(validAirportParsed)
+    val validAirportParsedResult = Airport.parseAirport(validAirport)
+    validAirportParsedResult.isRight must be(true)
+    validAirportParsedResult.contains(validAirportParsedExpected)
   }
 
   it should "Not parse an invalid airport" in {
-    val invalidAirport = Array("This, won't, work")
+    val invalidAirport =
+      Array("This", "won't", "work", "", "", "", "", "", "", "", "")
     Airport.parseAirport(invalidAirport).isLeft must be(true)
   }
 
   "Countries" should "Parse a valid country" in {
     val validCountry = Array(
       "302612",
-      "\"ZW\",\"Zimbabwe\",\"AF\",\"http://en.wikipedia.org/wiki/Zimbabwe\","
+      "ZW",
+      "Zimbabwe",
+      "AF",
+      "http://en.wikipedia.org/wiki/Zimbabwe",
+      ""
     )
     val validCountryParsed = Country(
       302612,
@@ -80,7 +86,26 @@ class ParserSpec extends AnyFlatSpec with Matchers:
 
   "Runways" should "Parse a valid runway" in {
     val validRunway = Array(
-      "253744,6802,\"04W\",2751,75,\"ASPH-G\",1,0,\"06\",46.0213,-92.9001,1021,66,190,\"24\",46.0244,-92.8902,1009,246,394"
+      "253744",
+      "6802",
+      "04W",
+      "2751",
+      "75",
+      "ASPH-G",
+      "1",
+      "0",
+      "06",
+      "46.0213",
+      "-92.9001",
+      "1021",
+      "66",
+      "190",
+      "24",
+      "46.0244",
+      "-92.8902",
+      "1009",
+      "246",
+      "394"
     )
     val validRunwayParsed = Runway(
       253744,
@@ -109,6 +134,6 @@ class ParserSpec extends AnyFlatSpec with Matchers:
   }
 
   it should "Not parse an invalid runway" in {
-    val invalidRunway = Array("This", "won't", "work")
+    val invalidRunway = Array("This", "won't", "work", "", "", "", "", "", "")
     Runway.parseRunway(invalidRunway).isLeft must be(true)
   }
